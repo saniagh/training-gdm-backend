@@ -1,0 +1,82 @@
+swagger: "2.0"
+
+info:
+  version: "1.0.0"
+  title: sample-app
+
+# during dev, should point to your local machine
+host: localhost:3001
+
+basePath: /
+
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+
+consumes:
+  - application/json
+  - multipart/form-data
+
+produces:
+  - application/json
+
+paths:
+  /liveness-probe:
+    x-swagger-router-controller: livenessProbe
+    get:
+      description: Checks if the service has started
+      operationId: livenessProbe
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /login:
+    x-swagger-router-controller: authentication
+    post:
+      description: Login a user
+      operationId: login
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /credentials:
+    x-swagger-router-controller: authentication
+    get:
+      description: Get a user's credentials
+      operationId: getCredentials
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/SuccessResponse"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  SuccessResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
